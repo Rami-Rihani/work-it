@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello TestController!{% endblock %}
+
+{% block body %}
+    <div id="data" style="display: none;">{{ data }}</div>
+    <br>
+
+    <style>
+        body {
+            font-family: Arial;
+            font-size: 0.95em;
+            color: #929292;
+        }
+
+        .report-container {
+            border: #E0E0E0 1px solid;
+            padding: 20px 40px 40px 40px;
+            border-radius: 2px;
+            width: 550px;
+            margin: 0 auto;
+        }
+
+        .weather-icon {
+            vertical-align: middle;
+            margin-right: 20px;
+        }
+
+        .weather-forecast {
+            color: #212121;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 20px 0px;
+        }
+
+        span.min-temperature {
+            margin-left: 15px;
+            color: #929292;
+        }
+
+        .time {
+            line-height: 25px;
+        }
+    </style>
+
+    <div class="report-container">
+        <h2><span id="name">  Weather Status</span></h2>
+        <div class="time">Data receiving time : <span id="dt"></span></div>
+        <div class="time">
+            <div><span id="weatherDescription"></span></div>
+        </div>
+        <div class="weather-forecast">
+            <span id="icon"></span>
+        </div>
+        <div class="time">
+            <div>Humidity: <span id="mainHumidity"></span> %</div>
+            <div>Wind: <span id="windSpeed"></span> km/h</div>
+        </div>
+    </div>
+
+
+    <script>
+        var obj = JSON.parse(document.getElementById("data").innerText);
+        document.getElementById("name").innerHTML = obj.name + ', ' + obj.sys.country;
+        var dtdata = convertUnixTimestampToTime(obj.dt);
+        document.getElementById("dt").innerHTML = dtdata;
+
+        document.getElementById("weatherDescription").innerHTML = obj.weather[0].description;
+
+        document.getElementById("icon").innerHTML =
+            "<img src=http://openweathermap.org/img/w/" + obj.weather[0].icon + ".png class=weather-icon />"
+            + obj.main.temp_max + "&deg;C"
+            + "<span class=min-temperature>" + obj.main.temp_min + "&deg;C</span>";
+
+
+        document.getElementById("mainHumidity").innerHTML = obj.main.humidity;
+        document.getElementById("windSpeed").innerHTML = obj.wind.speed;
+
+        function convertUnixTimestampToTime(timestamp) {
+            var d = new Date(timestamp * 1000),
+                yyyy = d.getFullYear(),
+                mm = ('0' + (d.getMonth() + 1)).slice(-2),
+                dd = ('0' + d.getDate()).slice(-2),
+                hh = d.getHours(),
+                h = hh,
+                min = ('0' + d.getMinutes()).slice(-2),
+                ampm = 'AM',
+                time;
+
+            if (hh > 12) {
+                h = hh - 12;
+                ampm = 'PM';
+            } else if (hh === 12) {
+                h = 12;
+                ampm = 'PM';
+            } else if (hh == 0) {
+                h = 12;
+            }
+            time =  dd + '-' + mm + '-' + yyyy + ', ' + h + ':' + min + ' ' + ampm;
+            return time;
+        }
+    </script>
+{% endblock %}

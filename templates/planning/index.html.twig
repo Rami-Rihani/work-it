@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Planning Table{% endblock %}
+
+{% block body %}
+
+    <h1>Planning Table</h1>
+
+    <table class="table" id="planning">
+        <thead>
+            <tr>
+                <th>Id Planning</th>
+                <th>Id Coach</th>
+                <th>Coach Name</th>
+                <th>Course</th>
+                <th>Start lesson</th>
+                <th>End lesson</th>
+                <th>Max nbr</th>
+                <th>Nbr actuel</th>
+                <th>more actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for planning in plannings %}
+
+            <tr>
+                <td>{{ planning.idPlanning }}</td>
+                <td>{{ planning.idCoach }}</td>
+                <td>{{ planning.coachName }}</td>
+                <td>{{ planning.course }}</td>
+                <td>{{ planning.startlesson }}</td>
+                <td>{{ planning.endlesson }}</td>
+                <td>{{ planning.maxnbr }}</td>
+                <td>{{ planning.nbractuel }}</td>
+                <td>
+                    <a href="{{ path('planning_show', {'idPlanning': planning.idPlanning}) }}">see the liste</a>
+                    <a href="{{ path('planning_edit', {'idPlanning': planning.idPlanning}) }}">update</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('planning_new') }}">Create new</a>
+
+
+{% endblock %}
+
+
